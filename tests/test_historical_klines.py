@@ -3,7 +3,7 @@
 
 from binance.client import Client
 import pytest
-import requests_mock
+import requests
 
 
 client = Client('api_key', 'api_secret')
@@ -22,12 +22,12 @@ def test_exact_amount():
 
     second_res = []
 
-    with requests_mock.mock() as m:
+    with requests.get as m:
         m.get('https://api.binance.com/api/v1/klines?interval=1m&limit=1&startTime=0&symbol=BNBBTC', json=first_available_res)
         m.get('https://api.binance.com/api/v1/klines?interval=1m&limit=500&startTime=1519862400000&symbol=BNBBTC', json=first_res)
         m.get('https://api.binance.com/api/v1/klines?interval=1m&limit=500&startTime=1519892400000&symbol=BNBBTC', json=second_res)
         client.get_historical_klines(
-            symbol="BNBBTC",
+            symbol="XRPUSDT",
             interval=Client.KLINE_INTERVAL_1MINUTE,
             start_str="1st March 2018"
         )
